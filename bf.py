@@ -1,14 +1,14 @@
 import click
 
 parser_dict={
-    '+': '++(*tape);\n',
-    '-': '--(*tape);\n',
-    '<': '--tape;\n',
-    '>': '++tape;\n',
-    '.': 'printf("%c",(*tape));\n',
-    '[': ' while(*tape) {\n',
-    ']': ' }\n',
-    ',': 'scanf("%c",&tape);\n'
+    '+': '\t++(*tape);\n',
+    '-': '\t--(*tape);\n',
+    '<': '\t--tape;\n',
+    '>': '\t++tape;\n',
+    '.': '\tprintf("%c",(*tape));\n',
+    '[': '\twhile(*tape) {\n',
+    ']': '\t}\n',
+    ',': '\tscanf("%c",&tape);\n'
     }
 
 """
@@ -22,10 +22,9 @@ the translation
 @click.option('-o', nargs=1, type=click.File('w'))
 def parse(source, o):
     cprog="""#include<stdio.h>
+#include<stdlib.h>\n
     int main(){
-        static char mem[30000], *tape\n;
-        tape=mem\n;   
-        """
+        char *tape = malloc(sizeof(char) * 3000);\n"""
  #to initialize the brainf*** environment
     lines = source.read()
     for i in lines:
