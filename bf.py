@@ -1,5 +1,6 @@
 import click
 
+#Dict that represents the parser between brainf_ck-code and c-code
 parser_dict={
     '+': '\t++(*tape);\n',
     '-': '\t--(*tape);\n',
@@ -20,21 +21,30 @@ the translation
 @click.command()
 @click.argument('source', type=click.File('r'))
 @click.option('-o', nargs=1, type=click.File('w'))
+
 def parse(source, o):
-    cprog="""#include<stdio.h>
+  """
+    source: An input file with .bf extension
+    o: An output file with .c extension
+    Reads the lines from the input file,
+    and parsers the code using parser_dict,
+    then writes to the output file
+  """
+
+  cprog="""#include<stdio.h>
 #include<stdlib.h>\n
     int main(){
         char *tape = malloc(sizeof(char) * 3000);\n"""
- #to initialize the brainf*** environment
-    lines = source.read()
-    for i in lines:
-      if i in parser_dict:
-        cprog += parser_dict[i] 
+ 
+  code = source.read()
+  for i in code:
+    if i in parser_dict:
+      cprog += parser_dict[i] 
     
-    cprog += "\n return 0; \n} "
-    o.write(cprog)
-    o.flush()
+  cprog += "\n return 0; \n} "
+  o.write(cprog)
+  o.flush()
 
 #main program
 if __name__=="__main__":
-    parse()
+  parse()
